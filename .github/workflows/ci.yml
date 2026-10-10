@@ -1,0 +1,19 @@
+name: CI
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  check:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: pip install -r requirements.txt ruff==0.17.0 mypy==2.4.0 types-PyYAML
+      - run: ruff check .
+      - run: ruff format --check .
+      - run: mypy
+      - run: python -m unittest discover -s tests
